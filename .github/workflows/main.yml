@@ -1,0 +1,47 @@
+name: React CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull request to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # You can change this to the Node.js version your project uses
+
+    - name: Install dependencies
+      run: npm install  # Installs your React project's dependencies
+
+    - name: Run tests
+      run: npm test -- --ci --runInBand  # Run tests (ensure your React tests are set up)
+
+    - name: Build project
+      run: npm run build  # Run build command to create production build of your app
+
+    - name: Deploy to AWS S3
+      run: |
+        # Configure AWS CLI
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set region ${{ secrets.AWS_REGION }}
+
+        # Sync the build directory to the S3 bucket
+        aws s3 sync ./build s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete --acl public-read
+
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
