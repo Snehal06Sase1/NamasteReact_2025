@@ -1,0 +1,29 @@
+{
+  "name": "namastereact_2025",
+  "version": "1.0.0",
+  "description": "This is repo created by snehal sase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "yes"
+  },
+  "keywords": [
+    "namaste",
+    "React",
+    "React",
+    "Snehal",
+    "Sase"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.14.1"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
